@@ -1,14 +1,13 @@
 'use client'
 
-import { FaSearch, FaFilter } from 'react-icons/fa'
+import { FaSearch } from 'react-icons/fa'
 import { useState } from 'react'
 
 interface SearchAndFilterProps {
   onSearch: (query: string) => void;
-  onFilter: (category: string) => void;
 }
 
-export default function SearchAndFilter({ onSearch, onFilter }: SearchAndFilterProps) {
+export default function SearchAndFilter({ onSearch }: SearchAndFilterProps) {
   const [searchQuery, setSearchQuery] = useState('')
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -31,10 +30,6 @@ export default function SearchAndFilter({ onSearch, onFilter }: SearchAndFilterP
           />
           <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
         </div>
-        <button className="flex items-center space-x-2 px-4 py-2 border border-gray-300 rounded-full hover:bg-gray-50">
-          <FaFilter className="text-gray-600" />
-          <span>Filtrele</span>
-        </button>
       </div>
     </div>
   )

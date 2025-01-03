@@ -1,7 +1,6 @@
 'use client'
 
 import { useState } from 'react'
-import { Category } from '@/types/blog'
 
 interface CategoryFilterProps {
   onCategorySelect: (category: string) => void;
