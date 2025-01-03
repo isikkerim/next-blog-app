@@ -3,14 +3,13 @@ import Image from 'next/image'
 import { FaCalendar, FaUser, FaTag } from 'react-icons/fa'
 import posts from '@/data/posts.json'
 
-type Props = {
+interface PageProps {
   params: {
     slug: string;
   };
-  searchParams: { [key: string]: string | string[] | undefined };
-};
+}
 
-export default function BlogPostPage({ params }: Props) {
+export default async function BlogPostPage({ params }: PageProps) {
   const post = posts.posts.find((p) => p.slug === params.slug)
 
   if (!post) {
