@@ -2,14 +2,29 @@ import { notFound } from 'next/navigation'
 import Image from 'next/image'
 import { FaCalendar, FaUser, FaTag } from 'react-icons/fa'
 import posts from '@/data/posts.json'
+import { Metadata } from 'next'
 
-interface PageProps {
-  params: {
-    slug: string;
-  };
+type Props = {
+  params: { slug: string }
+  searchParams: { [key: string]: string | string[] | undefined }
 }
 
-export default async function BlogPostPage({ params }: PageProps) {
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const post = posts.posts.find((p) => p.slug === params.slug)
+  
+  if (!post) {
+    return {
+      title: 'Post Not Found',
+    }
+  }
+
+  return {
+    title: post.title,
+    description: post.excerpt,
+  }
+}
+
+export default function BlogPostPage({ params }: Props) {
   const post = posts.posts.find((p) => p.slug === params.slug)
 
   if (!post) {
