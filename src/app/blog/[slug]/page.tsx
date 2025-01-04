@@ -1,34 +1,49 @@
-import { notFound } from 'next/navigation'
-import Image from 'next/image'
-import { FaCalendar, FaUser, FaTag } from 'react-icons/fa'
-import posts from '@/data/posts.json'
-import { Metadata } from 'next'
+import { notFound } from 'next/navigation';
+import Image from 'next/image';
+import { FaCalendar, FaUser, FaTag } from 'react-icons/fa';
+import posts from '@/data/posts.json';
+import { Metadata } from 'next';
 
-type Props = {
-  params: { slug: string }
-  searchParams: { [key: string]: string | string[] | undefined }
+interface Post {
+  slug: string;
+  title: string;
+  excerpt: string;
+  content: string;
+  image: string;
+  date: string;
+  author: string;
+  category: string;
 }
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const post = posts.posts.find((p) => p.slug === params.slug)
-  
+interface PageParams {
+  params: Promise<{ slug: string }>;
+}
+
+async function getPost(params: PageParams): Promise<Post | undefined> {
+  const { slug } = await params.params;
+  return posts.posts.find((p) => p.slug === slug) as Post | undefined;
+}
+
+export async function generateMetadata(params: PageParams): Promise<Metadata> {
+  const post = await getPost(params);
+
   if (!post) {
     return {
       title: 'Post Not Found',
-    }
+    };
   }
 
   return {
     title: post.title,
     description: post.excerpt,
-  }
+  };
 }
 
-export default function BlogPostPage({ params }: Props) {
-  const post = posts.posts.find((p) => p.slug === params.slug)
+export default async function BlogPostPage(params: PageParams) {
+  const post = await getPost(params);
 
   if (!post) {
-    notFound()
+    notFound();
   }
 
   return (
@@ -110,11 +125,11 @@ export default function BlogPostPage({ params }: Props) {
         </div>
       </article>
     </div>
-  )
+  );
 }
 
 export function generateStaticParams() {
   return posts.posts.map((post) => ({
     slug: post.slug,
-  }))
-} 
+  }));
+}
